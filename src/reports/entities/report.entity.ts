@@ -1,31 +1,31 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity() // Ini memberitahu TypeORM bahwa class ini adalah tabel database
+@Entity() // tabel database
 export class Report {
-  @PrimaryGeneratedColumn('uuid') // ID otomatis pakai format UUID (biar unik & keren)
+  @PrimaryGeneratedColumn('uuid') // ID in UUID format
   id: string;
 
   @Column()
   title: string;
 
-  @Column('text') // Tipe text untuk tulisan panjang
+  @Column('text') 
   description: string;
 
-  @Column({ nullable: true }) // Boleh kosong dulu (karena foto di-handle belakangan)
+  @Column({ nullable: true }) // later (for photo)
   photoUrl: string;
 
-  @Column({ default: 'pending' }) // Status default saat lapor pertama kali
+  @Column({ default: 'pending' }) // default stats
   status: string;
 
-  // INI BAGIAN SPESIAL: POSTGIS
-  // Kita menyimpan lokasi sebagai titik koordinat (Point)
+  // POSTGIS
+  // Save loc as coordinat (Point)
   @Column({
     type: 'geometry',
     spatialFeatureType: 'Point',
-    srid: 4326, // 4326 adalah standar kode GPS dunia (WGS84)
+    srid: 4326,
     nullable: true,
   })
-  location: string; 
+  location: any; 
 
   @CreateDateColumn()
   createdAt: Date;
