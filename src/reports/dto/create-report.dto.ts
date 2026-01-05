@@ -1,4 +1,5 @@
 import { IsNotEmpty, IsString, IsNumber, Min, Max } from 'class-validator';
+import { Type } from 'class-transformer'; // <--- 1. Tambah Import Ini
 
 export class CreateReportDto {
   @IsString()
@@ -9,12 +10,13 @@ export class CreateReportDto {
   @IsNotEmpty()
   description: string;
 
-  // Kita minta Latitude & Longitude dipisah biar validasinya gampang
+  @Type(() => Number) 
   @IsNumber()
   @Min(-90)
   @Max(90)
   latitude: number;
 
+  @Type(() => Number)
   @IsNumber()
   @Min(-180)
   @Max(180)
