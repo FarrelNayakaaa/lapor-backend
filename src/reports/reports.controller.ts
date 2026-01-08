@@ -1,21 +1,20 @@
 import { 
-  Controller, Get, Post, Body, 
+  Controller, Get, Post, Body, Patch, Param, 
   UseInterceptors, UploadedFile, ParseFilePipe, MaxFileSizeValidator, FileTypeValidator 
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ReportsService } from './reports.service';
 import { CreateReportDto } from './dto/create-report.dto';
+import { UpdateReportStatusDto } from './dto/update-report.dto';
 
 @Controller('reports')
 export class ReportsController {
   constructor(private readonly reportsService: ReportsService) {}
 
   @Post()
-  @UseInterceptors(FileInterceptor('file')) // 'file' adalah nama key di form-data nanti
+  @UseInterceptors(FileInterceptor('file'))
   create(
     @Body() createReportDto: CreateReportDto,
-    
-    // Validasi File: Maks 2MB, harus JPG/PNG
     @UploadedFile(
       new ParseFilePipe({
         validators: [
@@ -25,16 +24,20 @@ export class ReportsController {
       }),
     ) file: Express.Multer.File,
   ) {
-    // Console log dulu buat ngecek filenya ketangkep atau enggak
     console.log('File berhasil diterima:', file.originalname);
-    
-    // Nanti di sini kita kirim ke Service untuk upload ke MinIO
-    // Sementara kita kirim dummy text dulu ke database
     return this.reportsService.create(createReportDto, file);
   }
-
+  
   @Get()
   findAll() {
     return this.reportsService.findAll();
+  }
+
+  @Patch(':id/status')
+  updateStatus(
+    @Param('id') id: string, 
+    @Body() updateReportStatusDto: UpdateReportStatusDto
+  ) {
+    return this.reportsService.updateStatus(id, updateReportStatusDto.status);
   }
 }

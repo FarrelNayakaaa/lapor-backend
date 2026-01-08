@@ -59,4 +59,18 @@ export class ReportsService {
   findAll() {
     return this.reportsRepository.find();
   }
+
+  async updateStatus(id: string, status: string) {
+    // 1. Cari dulu laporannya ada gak?
+    const report = await this.reportsRepository.findOne({ where: { id } });
+    if (!report) {
+      throw new Error('Laporan tidak ditemukan');
+    }
+
+    // 2. Update statusnya
+    report.status = status;
+    
+    // 3. Simpan perubahan
+    return await this.reportsRepository.save(report);
+  }
 }
