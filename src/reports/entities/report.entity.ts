@@ -1,31 +1,29 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne } from 'typeorm';
+import { User } from '../../users/entities/user.entity'; // Import User
 
-@Entity() // tabel database
+@Entity()
 export class Report {
-  @PrimaryGeneratedColumn('uuid') // ID in UUID format
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
   title: string;
 
-  @Column('text') 
+  @Column()
   description: string;
 
-  @Column({ nullable: true }) // later (for photo)
+  @Column()
   photoUrl: string;
 
-  @Column({ default: 'pending' }) // default stats
+  @Column({ default: 'pending' })
   status: string;
 
-  // POSTGIS
-  // Save loc as coordinat (Point)
-  @Column({
-    type: 'geometry',
-    spatialFeatureType: 'Point',
-    srid: 4326,
-    nullable: true,
-  })
-  location: any; 
+  @Column('geometry', { spatialFeatureType: 'Point', srid: 4326 })
+  location: { type: string; coordinates: number[] };
+
+  // Banyak Report dimiliki oleh Satu User
+  @ManyToOne(() => User, (user) => user.reports, { onDelete: 'SET NULL' })
+  user: User;
 
   @CreateDateColumn()
   createdAt: Date;

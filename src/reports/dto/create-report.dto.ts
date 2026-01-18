@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsString, IsNumber, Min, Max } from 'class-validator';
-import { Type } from 'class-transformer'; // <--- 1. Tambah Import Ini
+import { Type } from 'class-transformer'; 
 
 export class CreateReportDto {
   @IsString()

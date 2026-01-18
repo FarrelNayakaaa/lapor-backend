@@ -4,6 +4,6 @@ import { IsEnum, IsNotEmpty } from 'class-validator';
 
 export class UpdateReportStatusDto {
   @IsNotEmpty()
-  @IsEnum(['pending', 'in_progress', 'done', 'rejected']) // Hanya boleh 4 kata ini
+  @IsEnum(['pending', 'in_progress', 'done', 'rejected'])
   status: string;
 }
